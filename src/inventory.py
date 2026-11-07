@@ -45,9 +45,17 @@ class InventoryManager:
 
     @staticmethod
     def _required_text(value: object, label: str) -> str:
-        if not isinstance(value, str) or not value.strip():
+        # Reject values that are not strings.
+        if not isinstance(value, str):
             raise ValueError(f"{label} cannot be empty")
-        return value.strip()
+
+        # Remove surrounding whitespace once.
+        cleaned = value.strip()
+
+        # Reject empty strings and whitespace-only input.
+        if not cleaned:
+            raise ValueError(f"{label} cannot be empty")
+        return cleaned
 
     def _update_low_stock(self, product: Product) -> None:
         """Maintain low-stock invariant immediately after an accepted change."""
